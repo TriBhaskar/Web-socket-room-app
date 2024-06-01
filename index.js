@@ -9,14 +9,15 @@ const io = new Server(server);
 
 app.use(express.static("client"));
 
-// app.get("/", (req, res) => {
-//   res.send("<h1>Hello world</h1>");
-// });
-
 io.on("connection", (socket) => {
-  console.log("a user connected");
+  socket.emit("message", "Welcome to ChatCord!");
+
+  //Broadcast when a user connects
+  socket.broadcast.emit("message", "A user has joined the chat");
+
+  //Runs when client disconnects
   socket.on("disconnect", () => {
-    console.log("user disconnected");
+    io.emit("message", "A user has left the chat");
   });
 });
 server.listen(port, () => {
